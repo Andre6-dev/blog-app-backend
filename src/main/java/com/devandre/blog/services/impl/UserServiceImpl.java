@@ -6,6 +6,8 @@ import com.devandre.blog.payloads.UserDto;
 import com.devandre.blog.repositories.UserRepository;
 import com.devandre.blog.services.UserService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,9 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+
+    private final ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -69,22 +74,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public User dtoToUser(UserDto userDto) {
-        User user = new User();
-        user.setId(userDto.getId());
+        User user = this.modelMapper.map(userDto, User.class);
+        /*user.setId(userDto.getId());
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setAbout(userDto.getAbout());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(userDto.getPassword());*/
         return user;
     }
 
     public UserDto userToDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setAbout(user.getAbout());
-        userDto.setPassword(user.getPassword());
+        UserDto userDto = this.modelMapper.map(user, UserDto.class);
         return userDto;
     }
 }
